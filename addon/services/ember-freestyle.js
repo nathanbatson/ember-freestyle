@@ -1,12 +1,10 @@
+/* global hljs */
 import Ember from 'ember';
 
 const { computed } = Ember;
+const { RSVP: { Promise } } = Ember;
 
 export default Ember.Service.extend({
-  // Each json config file in the freestyle directory is injected
-  // as a property on this service by the ember-freestyle
-  // initializer
-
   showLabels: true,
   showNotes: true,
   showCode: true,
@@ -22,21 +20,12 @@ export default Ember.Service.extend({
 
   notFocused: computed.not('focus'),
 
-  hljsVersion: '9.12.0',
   hljsPromise: null,
-
-  hljsUrl() {
-    return `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${this.hljsVersion}/highlight.min.js`;
-  },
-
-  hljsThemeUrl(theme) {
-    return `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${this.hljsVersion}/styles/${theme}.min.css`;
-  },
 
   ensureHljs() {
     if (!this.hljsPromise) {
       this.hljsPromise = new Promise((resolve) => {
-        return Ember.$.getScript(this.hljsUrl()).done((script) => {
+        return Ember.$.getScript('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js').done((script) => {
           resolve(script);
         })
       });
@@ -47,21 +36,7 @@ export default Ember.Service.extend({
   highlight(el) {
     this.ensureHljs().then(() => {
       hljs.highlightBlock(el);
-    });
-  },
-
-  ensureHljsTheme(theme) {
-    if (Ember.$(`[data-hljs-theme=${theme}]`)[0]) {
-      return;
-    }
-
-    let link  = document.createElement('link');
-    link.rel  = 'stylesheet';
-    link.type = 'text/css';
-    link.href = this.hljsThemeUrl(theme);
-    link.setAttribute('data-hljs-theme', `${theme}`);
-
-    document.head.appendChild(link);
+    })
   },
 
   // menu - tree structure of named sections with named subsections
