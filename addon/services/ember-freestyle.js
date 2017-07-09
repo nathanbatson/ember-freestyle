@@ -22,6 +22,48 @@ export default Ember.Service.extend({
 
   notFocused: computed.not('focus'),
 
+  hljsVersion: '9.12.0',
+  hljsPromise: null,
+
+  hljsUrl() {
+    return `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${this.hljsVersion}/highlight.min.js`;
+  },
+
+  hljsThemeUrl(theme) {
+    return `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/${this.hljsVersion}/styles/${theme}.min.css`;
+  },
+
+  ensureHljs() {
+    if (!this.hljsPromise) {
+      this.hljsPromise = new Promise((resolve) => {
+        return Ember.$.getScript(this.hljsUrl()).done((script) => {
+          resolve(script);
+        })
+      });
+    }
+    return this.hljsPromise;
+  },
+
+  highlight(el) {
+    this.ensureHljs().then(() => {
+      hljs.highlightBlock(el);
+    });
+  },
+
+  ensureHljsTheme(theme) {
+    if (Ember.$(`[data-hljs-theme=${theme}]`)[0]) {
+      return;
+    }
+
+    let link  = document.createElement('link');
+    link.rel  = 'stylesheet';
+    link.type = 'text/css';
+    link.href = this.hljsThemeUrl(theme);
+    link.setAttribute('data-hljs-theme', `${theme}`);
+
+    document.head.appendChild(link);
+  },
+
   // menu - tree structure of named sections with named subsections
 
   registerSection(sectionName, subsectionName = '') {

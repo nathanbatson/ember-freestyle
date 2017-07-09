@@ -1,15 +1,16 @@
 /* eslint-env node */
 'use strict';
 var mergeTrees = require('broccoli-merge-trees');
-var stew = require('broccoli-stew');
-var path = require('path');
 var fs   = require('fs');
 var flatiron = require('broccoli-flatiron');
 var freestyleUsageSnippetFinder = require('./freestyle-usage-snippet-finder');
 
+<<<<<<< HEAD
 var Funnel = require('broccoli-funnel');
 var unwatchedTree  = require('broccoli-unwatched-tree');
 
+=======
+>>>>>>> a105a7d... Load Highlight.js themes remotely
 module.exports = {
   name: 'ember-freestyle',
 
@@ -49,6 +50,7 @@ module.exports = {
     return ['app'];
   },
 
+<<<<<<< HEAD
   treeForAddonStyles: function() {
     var addonStyles = new Funnel(path.join(__dirname, 'addon/styles'));
 
@@ -82,6 +84,10 @@ module.exports = {
         exports: { 'remarkable': ['default'] }
       });
     }
+=======
+  included: function(/*app, parentAddon*/) {
+    this._super.included.apply(this, arguments);
+>>>>>>> a105a7d... Load Highlight.js themes remotely
   },
 
   isDevelopingAddon: function() {
