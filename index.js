@@ -5,12 +5,6 @@ var fs   = require('fs');
 var flatiron = require('broccoli-flatiron');
 var freestyleUsageSnippetFinder = require('./freestyle-usage-snippet-finder');
 
-<<<<<<< HEAD
-var Funnel = require('broccoli-funnel');
-var unwatchedTree  = require('broccoli-unwatched-tree');
-
-=======
->>>>>>> a105a7d... Load Highlight.js themes remotely
 module.exports = {
   name: 'ember-freestyle',
 
@@ -50,44 +44,8 @@ module.exports = {
     return ['app'];
   },
 
-<<<<<<< HEAD
-  treeForAddonStyles: function() {
-    var addonStyles = new Funnel(path.join(__dirname, 'addon/styles'));
-
-    var highlightJsTree = new Funnel(unwatchedTree(path.dirname(require.resolve('highlight.js/package.json'))), {
-      srcDir: '/styles',
-      destDir: '/ember-freestyle/highlight.js',
-      files: [
-        'tomorrow-night.css',
-        'zenburn.css',
-        'hybrid.css',
-        'atelier-cave-dark.css',
-        'solarized-light.css',
-        'docco.css',
-        'monokai-sublime.css'
-      ]
-    });
-    highlightJsTree = stew.rename(highlightJsTree, '.css', '.scss');
-
-    return mergeTrees([highlightJsTree, addonStyles]);
-  },
-
-  included: function(app, parentAddon) {
-    this._super.included(arguments);
-
-    var target = app || parentAddon;
-    if (target.import) {
-      target.import(target.bowerDirectory + '/remarkable/dist/remarkable.js');
-      target.import(target.bowerDirectory + '/highlightjs/highlight.pack.js');
-      target.import('vendor/ember-remarkable/shim.js', {
-        type: 'vendor',
-        exports: { 'remarkable': ['default'] }
-      });
-    }
-=======
   included: function(/*app, parentAddon*/) {
     this._super.included.apply(this, arguments);
->>>>>>> a105a7d... Load Highlight.js themes remotely
   },
 
   isDevelopingAddon: function() {
